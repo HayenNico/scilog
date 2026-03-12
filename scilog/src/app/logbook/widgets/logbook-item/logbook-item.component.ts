@@ -1,17 +1,5 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  HostListener,
-  Input,
-  OnInit,
-  QueryList,
-  Renderer2,
-  ViewChild,
-  ViewChildren,
-  AfterViewInit,
-  OnDestroy,
-} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, QueryList, Renderer2, ViewChild, ViewChildren, AfterViewInit, OnDestroy } from '@angular/core';
 import { ChangeStreamService } from '@shared/change-stream.service';
 import { ChangeStreamNotification } from '@shared/changestreamnotification.model';
 import { HttpClient } from '@angular/common/http';
@@ -51,83 +39,59 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { TagEditorComponent as TagEditorComponent_1 } from '../../core/tag-editor/tag-editor.component';
+import { FormsModule } from '@angular/forms';
+import { MatRadioModule } from '@angular/material/radio';
 
 @Component({
-  selector: 'app-logbook-item',
-  templateUrl: './logbook-item.component.html',
-  styleUrls: ['./logbook-item.component.scss'],
-  providers: [ChangeStreamService, LogbookScrollService],
-  animations: [
-    trigger('rotatedState', [
-      state('default', style({ transform: 'rotate(0)' })),
-      state('rotated', style({ transform: 'rotate(225deg)' })),
-      transition('rotated => default', animate('200ms ease-out')),
-      transition('default => rotated', animate('200ms ease-in')),
-    ]),
-    trigger('buttonEdit', [
-      state(
-        'start',
-        style({ bottom: '-50px', right: '15px', opacity: '0', transform: 'translateY(-100%)' }),
-      ),
-      state('end', style({ bottom: '90px', right: '15px', opacity: '1' })),
-      transition('start => end', animate('200ms ease-out')),
-      transition('end => start', animate('200ms ease-in')),
-    ]),
-    trigger('buttonPhoto', [
-      state(
-        'start',
-        style({ bottom: '-50px', right: '15px', opacity: '0', transform: 'translateY(-100%)' }),
-      ),
-      state('end', style({ bottom: '170px', right: '15px', opacity: '1' })),
-      transition('start => end', animate('200ms ease-out')),
-      transition('end => start', animate('200ms ease-in')),
-    ]),
-    trigger('buttonTask', [
-      state(
-        'start',
-        style({ bottom: '-50px', right: '15px', opacity: '0', transform: 'translateY(-100%)' }),
-      ),
-      state('end', style({ bottom: '250px', right: '15px', opacity: '1' })),
-      transition('start => end', animate('200ms ease-out')),
-      transition('end => start', animate('200ms ease-in')),
-    ]),
-    trigger('buttonFile', [
-      state(
-        'start',
-        style({ bottom: '-50px', right: '15px', opacity: '0', transform: 'translateY(-100%)' }),
-      ),
-      state('end', style({ bottom: '330px', right: '15px', opacity: '1' })),
-      transition('start => end', animate('200ms ease-out')),
-      transition('end => start', animate('200ms ease-in')),
-    ]),
-    trigger('searchExpand', [
-      state('start', style({ height: '10px' })),
-      state('end', style({ height: '50vh' })),
-      transition('start => end', animate('200ms ease-in')),
-      transition('end => start', animate('200ms ease-in')),
-    ]),
-    trigger('scrollButton', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('1ms 0.2s ease-out', style({ opacity: 0.4 })),
-      ]),
-    ]),
-  ],
-  imports: [
-    NgSwitch,
-    ResizedDirective,
-    UiScrollModule,
-    SnippetComponent_1,
-    NgIf,
-    MatMiniFabButton,
-    MatIcon,
-    NgClass,
-    NgStyle,
-    MatTooltip,
-    CKEditorModule,
-    TagEditorComponent_1,
-    MatFabButton,
-  ],
+    selector: 'app-logbook-item',
+    templateUrl: './logbook-item.component.html',
+    styleUrls: ['./logbook-item.component.scss'],
+    providers: [ChangeStreamService, LogbookScrollService],
+    animations: [
+        trigger('rotatedState', [
+            state('default', style({ transform: 'rotate(0)' })),
+            state('rotated', style({ transform: 'rotate(225deg)' })),
+            transition('rotated => default', animate('200ms ease-out')),
+            transition('default => rotated', animate('200ms ease-in'))
+        ]),
+        trigger('buttonEdit', [
+            state('start', style({ bottom: '-50px', right: '15px', opacity: '0', transform: 'translateY(-100%)' })),
+            state('end', style({ bottom: '90px', right: '15px', opacity: '1' })),
+            transition('start => end', animate('200ms ease-out')),
+            transition('end => start', animate('200ms ease-in'))
+        ]),
+        trigger('buttonPhoto', [
+            state('start', style({ bottom: '-50px', right: '15px', opacity: '0', transform: 'translateY(-100%)' })),
+            state('end', style({ bottom: '170px', right: '15px', opacity: '1' })),
+            transition('start => end', animate('200ms ease-out')),
+            transition('end => start', animate('200ms ease-in'))
+        ]),
+        trigger('buttonTask', [
+            state('start', style({ bottom: '-50px', right: '15px', opacity: '0', transform: 'translateY(-100%)' })),
+            state('end', style({ bottom: '250px', right: '15px', opacity: '1' })),
+            transition('start => end', animate('200ms ease-out')),
+            transition('end => start', animate('200ms ease-in'))
+        ]),
+        trigger('buttonFile', [
+            state('start', style({ bottom: '-50px', right: '15px', opacity: '0', transform: 'translateY(-100%)' })),
+            state('end', style({ bottom: '330px', right: '15px', opacity: '1' })),
+            transition('start => end', animate('200ms ease-out')),
+            transition('end => start', animate('200ms ease-in'))
+        ]),
+        trigger('searchExpand', [
+            state('start', style({ height: '10px' })),
+            state('end', style({ height: '50vh' })),
+            transition('start => end', animate('200ms ease-in')),
+            transition('end => start', animate('200ms ease-in'))
+        ]),
+        trigger('scrollButton', [
+            transition(':enter', [
+                style({ opacity: 0 }),
+                animate('1ms 0.2s ease-out', style({ opacity: 0.4 }))
+            ])
+        ]),
+    ],
+    imports: [CommonModule,NgSwitch, ResizedDirective, UiScrollModule, SnippetComponent_1, NgIf, MatMiniFabButton, MatIcon, NgClass, NgStyle, MatTooltip, CKEditorModule, TagEditorComponent_1, MatFabButton,FormsModule,MatRadioModule]
 })
 export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
@@ -135,7 +99,7 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input()
   configIndex: number;
-
+  
   showLoadingCircle = true;
   viewOption = 'widgets';
   message: ChangeStreamNotification;
@@ -165,6 +129,9 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
   modifiedMetadata = false;
   metadataPanelExpanded = false;
   tag: string[] = [];
+  importanceLevels = [1, 2, 3, 4, 5];
+  importance: number = 3; // default value
+
 
   renderedHeights: number[] = [];
   editorClassRef: any = null;
@@ -197,6 +164,7 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
   public Editor = ClassicEditor;
   public editorConfig = CKeditorConfig;
   dataEditor: any;
+  
 
   constructor(
     private data: AddContentService,
@@ -215,43 +183,22 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
     private scrollToElementService: ScrollToElementService,
     private cdr: ChangeDetectorRef,
   ) {
-    this.subscriptions.push(
-      this.hotkeys
-        .addShortcut({
-          keys: 'control.shift.n',
-          description: { label: 'Set focus to editor', group: 'Logbook' },
-        })
-        .subscribe(() => {
-          this.setFocusToEditor();
-        }),
-    );
-    this.subscriptions.push(
-      this.hotkeys
-        .addShortcut({
-          keys: 'control.enter',
-          description: { label: 'Submit content', group: 'Logbook' },
-        })
-        .subscribe(() => {
-          this.addContent();
-        }),
-    );
-    this.subscriptions.push(
-      this.hotkeys
-        .addShortcut({
-          keys: 'shift.alt.enter',
-          description: { label: 'Submit message', group: 'Logbook' },
-        })
-        .subscribe(() => {
-          this.addMessage();
-        }),
-    );
-    this.subscriptions.push(
-      this.route.parent.url.subscribe((urlPath) => {
-        if (typeof urlPath[1] != 'undefined') {
-          this.logbookId = urlPath[1].path;
-        }
-      }),
-    );
+    console.log('🚨 FRONTEND CODE CHANGED', new Date().toISOString());
+
+    this.subscriptions.push(this.hotkeys.addShortcut({ keys: 'control.shift.n', description: { label: 'Set focus to editor', group: "Logbook" } }).subscribe(() => {
+      this.setFocusToEditor();
+    }));
+    this.subscriptions.push(this.hotkeys.addShortcut({ keys: 'control.enter', description: { label: 'Submit content', group: "Logbook" } }).subscribe(() => {
+      this.addContent();
+    }));
+    this.subscriptions.push(this.hotkeys.addShortcut({ keys: 'shift.alt.enter', description: { label: 'Submit message', group: "Logbook" } }).subscribe(() => {
+      this.addMessage();
+    }));
+    this.subscriptions.push(this.route.parent.url.subscribe((urlPath) => {
+      if (typeof urlPath[1] != 'undefined') {
+        this.logbookId = urlPath[1].path;
+      }
+    }));
     if (this.logbookInfo.logbookInfo == null) {
       console.log('retrieving logbook info');
       this.logbookInfo.getLogbookInfo(this.logbookId);
@@ -297,57 +244,85 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  updateViewSubscription() {
-    // console.log("Config: ", this.config);
-    if (this.currentViewSubscription != null) {
-      this.currentViewSubscription.unsubscribe();
-    }
-    this.currentViewSubscription = this.views.currentWidgetConfigs.subscribe(async (config) => {
-      // console.log(config[this.configIndex].config);
-      if (config != null) {
-        this.config = config[this.configIndex].config;
-        this.isDescending = this.config?.view?.order[0]?.split(' ')?.[1] === 'DESC';
-        this.targetId = this.config.filter.targetId;
-        this.isReadOnly = this.config.general.readonly;
-        await this.logbookScrollService.initialize(this.config);
-        this.logbookCount = (await this.logbookItemDataService.getCount(this.config)).count;
-        this.logbookScrollService.containerRef = this.snippetContainerRef;
-        // console.log(res)
-        this.startNotificationManager();
-      }
-    });
-  }
+ private currentConfigHash: string;
 
-  startNotificationManager() {
-    if (typeof this.config != 'undefined') {
-      if (this.changeStreamSubscriptions.length > 0) {
-        this.changeStreamSubscriptions.forEach((sub) => sub.unsubscribe());
-      }
-      let logbooks = [this.config.filter.targetId, ...this.config.filter?.additionalLogbooks];
-      console.log('Subscribing to the following logbooks: ', logbooks);
-      logbooks.forEach((log) => {
-        this.changeStreamSubscriptions.push(
-          this.notificationService.getNotification(log, this.config).subscribe((notification) => {
-            console.log(notification);
-            this.notifications.push(notification);
-            this.parseNotification(notification);
-          }),
-        );
-      });
-
-      if (this.dataService == null) {
-        this.dataService = this.data.currentMessage.subscribe((message) => {
-          // console.log(message);
-          this.message = message;
-          if (message != null && Object.keys(this.message).length != 0) {
-            // console.log(this.message);
-            this.submitContent(message);
-            this.message = null;
-          }
-        });
-      }
-    }
+updateViewSubscription() {
+  if (this.currentViewSubscription != null) {
+    this.currentViewSubscription.unsubscribe();
   }
+  
+  this.currentViewSubscription = this.views.currentWidgetConfigs.subscribe(async config => {
+    if (!config || config.length <= this.configIndex) return;
+    
+    const newConfig = config[this.configIndex].config;
+    const configHash = JSON.stringify({
+  targetId: newConfig.filter.targetId,
+  additionalLogbooks: newConfig.filter.additionalLogbooks || [],
+  order: newConfig.view.order || [],
+  tags: newConfig.filter.tags || [],
+  excludeTags: newConfig.filter.excludeTags || [],
+  importance: newConfig.filter.importance ?? null
+  
+});
+console.log("CONFIG HASH:", configHash);
+console.log("IMPORTANCE IN HASH:", newConfig.filter.importance);
+
+    
+    // Only reinitialize if config actually changed
+    if (this.currentConfigHash !== configHash) {
+      this.currentConfigHash = configHash;
+      this.config = newConfig;
+      this.isDescending = this.config?.view?.order[0]?.split(" ")?.[1] === 'DESC';
+      this.targetId = this.config.filter.targetId;
+      this.isReadOnly = this.config.general.readonly;
+      
+      await this.logbookScrollService.initialize(this.config);
+      this.logbookCount = (await this.logbookItemDataService.getCount(this.config)).count;
+      this.logbookScrollService.containerRef = this.snippetContainerRef;
+      this.startNotificationManager(); // Only runs on real config change
+    }
+  });
+}
+    //private notificationManagerStarted = false;
+
+
+startNotificationManager() {
+  
+ if (!this.config) return; // Clean old changeStream subscriptions
+ if (this.changeStreamSubscriptions.length > 0) { 
+this.changeStreamSubscriptions.forEach(s => s.unsubscribe()); 
+this.changeStreamSubscriptions = []; 
+} 
+const logbooks = [ this.config.filter.targetId, 
+...(this.config.filter?.additionalLogbooks ?? []) ]; 
+
+logbooks.forEach(log => {
+ const sub = this.notificationService
+ .getNotification(log, this.config) 
+.subscribe(notification => { 
+this.parseNotification(notification); }); 
+
+this.changeStreamSubscriptions.push(sub); });
+
+ // 🔴 ALWAYS unsubscribe previous message subscription
+if (this.dataService) {
+  this.dataService.unsubscribe();
+  this.dataService = null;
+}
+
+this.dataService = this.data.currentMessage$
+  .subscribe(message => {
+    if (!message) return;
+
+    // 🔴 Only main widget should submit
+    if (this.configIndex !== 1) return;
+
+    this.submitContent(message);
+  });
+
+}
+
+
 
   async parseNotification(notification: ChangeStreamNotification) {
     switch (notification.operationType) {
@@ -399,13 +374,17 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
               const snippetPos = this.childSnippets.toArray()[subPos[0]].snippet;
               const subSnippet = snippetPos.subsnippets[subPos[1]];
               this.updateSnippetValues(notification.content, subSnippet);
-              snippetPos.subsnippets = [subSnippet];
+              snippetPos.subsnippets = [...snippetPos.subsnippets];
+
+          // snippetPos.subsnippets[subPos[1]] = subSnippet; // not necessary since updated in place
             }
             if (updatePos < this.childSnippets.toArray().length) {
               let updateEntry = this.childSnippets.toArray()[updatePos];
               console.log(updatePos);
               this.updateSnippetValues(notification.content, updateEntry.snippet);
-              console.log('updated array at pos ', updatePos);
+              
+updateEntry.snippet = { ...updateEntry.snippet };
+              console.log("updated array at pos ", updatePos);
               console.log(updateEntry);
               updateEntry.updateContent();
             }
@@ -424,31 +403,57 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
         ) {
           // first check if the incoming message satisfies the current filters
           let snippetsFiltered = this.applyFilters([notification.content]);
-          console.log('SnippetsFiltered:', snippetsFiltered);
+          if (snippetsFiltered.length == 0) return;
+          const topLevelIndex = this.findPos(notification.content, "id", "id", false)[0];
+          const subLevelIndex = this.findPos(notification.content, "id", "id", true);
+
+          if (topLevelIndex < this.childSnippets.toArray().length ||
+              subLevelIndex.length === 2) {
+            return; // already exists
+          }
+
+          console.log("SnippetsFiltered:", snippetsFiltered);
           if (snippetsFiltered.length > 0) {
             if (this.childSnippets.toArray().length == 0) {
               await this.logbookScrollService.appendToEOF(notification.content);
             } else {
               let pos: number;
               switch (notification.content?.linkType) {
-                case 'quote':
-                case 'comment':
-                  pos = this.findPos(notification.content, 'id', 'parentId')[0];
-                  if (pos < this.childSnippets.toArray().length) {
-                    if (this.childSnippets.toArray()[pos].snippet?.subsnippets) {
-                      await this.logbookScrollService.relax();
-                      this.childSnippets
-                        .toArray()
-                        [pos].snippet.subsnippets.push(notification.content);
-                    } else {
-                      this.childSnippets.toArray()[pos].snippet.subsnippets = [
-                        notification.content,
-                      ];
-                    }
-                  }
-                  // this.datasource.adapter.check();
-                  break;
-                case 'paragraph':
+ case "quote":
+case "comment": {
+
+  const parentId = notification.content.parentId;
+
+  const parentComponent = this.childSnippets
+    .toArray()
+    .find(c => c.snippet.id === parentId);
+
+  if (!parentComponent) {
+    return;
+  }
+
+  // ✅ HARD DUPLICATE CHECK BY ID
+  const alreadyExists = parentComponent.snippet.subsnippets?.some(
+    s => s.id === notification.content.id
+  );
+
+  if (alreadyExists) {
+    return;
+  }
+
+  parentComponent.snippet.subsnippets = [
+    ...(parentComponent.snippet.subsnippets ?? []),
+    notification.content
+  ];
+
+  this.logbookScrollService.updateViewportEstimate();
+
+  break;
+}
+
+
+
+                case "paragraph":
                   // pos = this.insertIntoSortedArray(notification.content);
                   // console.log(pos);
                   console.log(notification.content);
@@ -478,17 +483,32 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
                     console.log('appending to EOF');
                     console.log(notification.content);
                     await this.logbookScrollService.appendToEOF(notification.content);
-                    let autoScrollEnabled = this.isAt('end', this.autoScrollFraction, 0);
-                    console.log('autoscroll: ', autoScrollEnabled);
+                    // let autoScrollEnabsubmitcoled = this.isAt('end', this.autoScrollFraction, 0);
+                    // console.log("autoscroll: ", autoScrollEnabled)
+                    // if (autoScrollEnabled || this.forceScrollToEnd) {
+                    //   console.log("scheduling scrolling to EOF");
+                    //   this.logbookScrollService.scrollToEnd = true;
+                    //   // await this.logbookScrollService.isLoaded$;
+                    //   setTimeout(() => {
+                    //     console.log("scrolling to EOF");
+                    //     this.scrollWindowTo('end');
+                    //   }, 50);
+                    // }
+
+                    const autoScrollEnabled = this.isAt('end', this.autoScrollFraction, 0);
+
+                    console.log("autoscroll: ", autoScrollEnabled);
+
                     if (autoScrollEnabled || this.forceScrollToEnd) {
                       console.log('scheduling scrolling to EOF');
                       this.logbookScrollService.scrollToEnd = true;
-                      // await this.logbookScrollService.isLoaded$;
+
                       setTimeout(() => {
                         console.log('scrolling to EOF');
                         this.scrollWindowTo('end');
                       }, 50);
                     }
+
                   } else {
                     if (
                       notification.content.defaultOrder >
@@ -559,8 +579,26 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
   //     subSnippet[key] = notification.content[key];
   //   }
   // }
+ 
 
-  submitContent(msg: ChangeStreamNotification) {
+    private submitting = false;
+      submitContent(msg: ChangeStreamNotification) {
+         console.log("SUBMITssssss TYPE CHECK", msg.id, msg.linkType);
+         console.log("FILES SENT:", msg.files);
+
+          if (this.submitting) {
+        console.warn('🚫 submit blocked: already submitting');
+        console.log('test console23');
+        console.log('test console25665');
+        return;
+      }
+
+      this.submitting = true;
+
+      setTimeout(() => {
+        this.submitting = false;
+      }, 500);
+
     // in the future, this should be extended to support inserting snippets below/above other snippets
     // for now, I just take the last array entry
     let referenceEntry: ChangeStreamNotification = {};
@@ -571,8 +609,11 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
       // POST -- EDIT SNIPPET
       let payload: ChangeStreamNotification = this._prepareEditPostPayload(referenceEntry, msg);
       this.logbookItemDataService.uploadParagraph(payload);
-    } else if (typeof msg.id != 'undefined' && msg.id != '') {
-      // PATCH -- UPDATE SNIPPET
+    }else if (msg.linkType !== 'comment' &&
+         (typeof msg.id != "undefined") &&
+         (msg.id != '')) {
+
+    // PATCH -- UPDATE SNIPPET
       let payload = this._preparePatchPayload(referenceEntry, msg);
       this.logbookItemDataService.uploadParagraph(payload, msg.id);
     } else {
@@ -609,7 +650,8 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
       accessGroups: referenceEntry.accessGroups,
       isPrivate: referenceEntry.isPrivate,
       tags: msg.tags,
-      snippetType: 'paragraph',
+      importance: msg.importance, 
+      snippetType: "paragraph",
       textcontent: msg.textcontent,
       id_session: localStorage.getItem('id_session'),
       files: msg.files,
@@ -631,7 +673,8 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
       accessGroups: referenceEntry.accessGroups,
       isPrivate: referenceEntry.isPrivate,
       tags: msg.tags,
-      snippetType: 'paragraph',
+      importance: msg.importance,
+      snippetType: "paragraph",
       linkType: msg.linkType,
       textcontent: msg.textcontent,
       files: msg.files,
@@ -645,6 +688,10 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
       payload.ownerGroup = this.userPreferences.userInfo.username;
     }
     console.log('posting data');
+    console.log('test console');
+    console.log("FINAL IMPORTANCE SENT:", msg.importance);
+
+
     console.log(payload);
 
     return payload;
@@ -668,46 +715,111 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
     ];
   }
 
+  // applyFilters(snippets: Basesnippets[]) {
+  //   return snippets.filter((snippet) => {
+  //     let includeSnippet = true;
+  //     if ((snippet.linkType) && ((snippet.linkType == "comment") || (snippet.linkType == "quote"))) {
+  //       return includeSnippet;
+  //     }
+  //     if (this.config.filter.tags?.length > 0) {
+  //       this.config.filter.tags.forEach((tag) => {
+  //         if (!snippet.tags.includes(tag)) {
+  //           includeSnippet = false;
+  //         }
+  //       })
+  //     }
+  //     if (!includeSnippet) {
+  //       return includeSnippet;
+  //     }
+  //     if (this.config.filter.excludeTags?.length > 0) {
+  //       this.config.filter.excludeTags.forEach((tag) => {
+  //         if (snippet.tags.includes(tag)) {
+  //           includeSnippet = false;
+  //         }
+  //       })
+  //     }
+  //     if (!includeSnippet) {
+  //       return includeSnippet;
+  //     }
+  //     if (typeof this.config.filter.targetId != 'undefined') {
+  //       let logbookIds = [this.config.filter.targetId, ...this.config.filter.additionalLogbooks];
+  //       return logbookIds.includes(snippet.parentId);
+  //     }
+  //     return includeSnippet;
+  //   });
+  // }
   applyFilters(snippets: Basesnippets[]) {
-    return snippets.filter((snippet) => {
-      let includeSnippet = true;
-      if (snippet.linkType && (snippet.linkType == 'comment' || snippet.linkType == 'quote')) {
-        return includeSnippet;
-      }
-      if (this.config.filter.tags?.length > 0) {
-        this.config.filter.tags.forEach((tag) => {
-          if (!snippet.tags.includes(tag)) {
-            includeSnippet = false;
-          }
-        });
-      }
-      if (!includeSnippet) {
-        return includeSnippet;
-      }
-      if (this.config.filter.excludeTags?.length > 0) {
-        this.config.filter.excludeTags.forEach((tag) => {
-          if (snippet.tags.includes(tag)) {
-            includeSnippet = false;
-          }
-        });
-      }
-      if (!includeSnippet) {
-        return includeSnippet;
-      }
-      if (typeof this.config.filter.targetId != 'undefined') {
-        let logbookIds = [this.config.filter.targetId, ...this.config.filter.additionalLogbooks];
-        return logbookIds.includes(snippet.parentId);
-      }
+  return snippets.filter((snippet) => {
+    console.log("FILTER DEBUG:", {
+  snippetTags: snippet.tags,
+  filterTags: this.config.filter.tags,
+  importance: snippet.importance,
+  filterImportance: this.config.filter.importance
+});
+
+    let includeSnippet = true;
+
+    if ((snippet.linkType) && ((snippet.linkType == "comment") || (snippet.linkType == "quote"))) {
       return includeSnippet;
-    });
+    }
+
+    // Include tags
+    if (this.config.filter.tags?.length > 0) {
+  if (!snippet.tags || snippet.tags.length === 0) {
+    return false;
   }
 
-  findPos(
-    newInput: ChangeStreamNotification,
-    tagOld: string = 'id',
-    tagNew: string = 'id',
-    subsnippets: boolean = false,
-  ) {
+  const matchesAll = this.config.filter.tags.every(tag =>
+    snippet.tags.includes(tag)
+  );
+
+  if (!matchesAll) {
+    return false;
+  }
+}
+
+
+    if (!includeSnippet) return false;
+
+    // Exclude tags
+    if (this.config.filter.excludeTags?.length > 0) {
+      this.config.filter.excludeTags.forEach((tag) => {
+        if (snippet.tags?.includes(tag)) {
+          includeSnippet = false;
+        }
+      });
+    }
+
+    if (!includeSnippet) return false;
+
+    
+    // ✅ IMPORTANCE FILTER
+if (this.config.filter?.importance?.length > 0) {
+  if (!this.config.filter.importance.includes(Number(snippet.importance))) {
+    console.log("CONFIG IMPORTANCE IN LOGBOOK:", this.config.filter.importance);
+console.log("IS ARRAY:", Array.isArray(this.config.filter.importance));
+
+    return false;
+  }
+}
+
+
+
+    if (!includeSnippet) return false;
+
+    // Target logbook filter
+    if (typeof this.config.filter.targetId != 'undefined') {
+      let logbookIds = [this.config.filter.targetId, ...(this.config.filter.additionalLogbooks || [])];
+      return logbookIds.includes(snippet.parentId);
+    }
+
+    return includeSnippet;
+  });
+}
+
+
+
+  findPos(newInput: ChangeStreamNotification, tagOld: string = 'id', tagNew: string = 'id', subsnippets: boolean = false) {
     // console.log(newInput);
     if (subsnippets) {
       for (let index = 0; index < this.childSnippets.toArray().length; index++) {
@@ -940,7 +1052,10 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
       ) {
         this.tag = this.childSnippets.last.snippet.tags;
       }
-      notification.tags = this.tagEditorRef.tag.map((tag) => tag.name);
+     notification.tags = this.tagEditorRef?.tag?.map(tag => tag.name) || [];
+
+notification.importance = Number(this.importance ?? 3);
+
 
       this.submitContent(notification);
       console.log(notification);
@@ -993,8 +1108,9 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
       this.dataService.unsubscribe();
     }
 
-    console.log('unsubscribe: ', this.subscriptions.length);
-    this.subscriptions.forEach((element) => {
+    console.log("unsubscribe: ", this.subscriptions.length);
+    
+    this.subscriptions.forEach(element => {
       element.unsubscribe();
     });
   }

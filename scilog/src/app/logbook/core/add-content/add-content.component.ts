@@ -25,6 +25,8 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { NgIf } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 
+
+
 interface editorDataInput {
   snippet: ChangeStreamNotification;
   content: string;
@@ -49,7 +51,11 @@ interface editorDataInput {
     MatDialogClose,
   ],
 })
+
+
 export class AddContentComponent implements OnInit, OnDestroy {
+  isSubmitting: boolean = false;
+
   public Editor = ClassicEditor;
   public editorConfig: any = CKeditorConfig;
 
@@ -100,15 +106,14 @@ export class AddContentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.setupComponent();
-    this.subscriptions.push(
-      this.dataService.currentMessage.subscribe((message) => {
-        console.log(message);
-        if (message != null) {
-          // this.message = message;
-        }
-      }),
-    );
+    this.setupComponent()
+    this.subscriptions.push(this.dataService.currentMessage$.subscribe(message => {
+
+      console.log(message);
+      if (message != null) {
+        // this.message = message;
+      }
+    }));
   }
 
   setupComponent() {
@@ -178,22 +183,35 @@ export class AddContentComponent implements OnInit, OnDestroy {
   }
 
   addContent($event: any) {
-    console.log('adding new content');
-    if (this.liveFeedback) {
-      return;
-    }
-
-    if (this.editor != undefined) {
-      this.data = this.editor.getData();
-    }
-    if (this.notification.snippetType === 'edit' && this.contentChanged)
-      this.notification.snippetType = 'paragraph';
-    localStorage.removeItem(`${this.message?.id}_message`);
-    localStorage.removeItem(`${this.message?.id}_tags`);
-    if (this.dialogTitle === 'Modify data snippet') return this.sendEditMessage();
-    this.prepareMessage(this.data);
-    this.sendMessage();
+  if (this.isSubmitting) {
+    return;
   }
+
+  this.isSubmitting = true;
+
+  if (this.editor != undefined) {
+    this.data = this.editor.getData();
+  }
+
+  if (this.notification.snippetType === 'edit' && this.contentChanged)
+    this.notification.snippetType = 'paragraph';
+
+  localStorage.removeItem(`${this.message?.id}_message`);
+  localStorage.removeItem(`${this.message?.id}_tags`);
+
+  if (this.dialogTitle === 'Modify data snippet') {
+    this.sendEditMessage();
+    this.isSubmitting = false;
+    return;
+  }
+
+  this.prepareMessage(this.data);
+  this.sendMessage();
+
+  // 🔑 prevent autosave duplicate
+  setTimeout(() => this.isSubmitting = false, 1000);
+}
+
 
   private sendEditMessage() {
     const notification = extractNotificationMessage(
@@ -220,9 +238,16 @@ export class AddContentComponent implements OnInit, OnDestroy {
   }
 
   changeChain(data: any = null) {
-    if (data) this.data = data;
-    if (this.notification.snippetType === 'edit') this.sendMessage();
+  if (this.isSubmitting) {
+    return;
   }
+
+  if (data)
+    this.data = data;
+
+  if (this.notification.snippetType === 'edit')
+    this.sendMessage();
+}
 
   prepareSubsnippetsQuoteContainer() {
     console.log(this.notification.subsnippets);
