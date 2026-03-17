@@ -6,17 +6,13 @@ import { ChangeStreamNotification } from './changestreamnotification.model';
   providedIn: 'root',
 })
 export class AddContentService {
-
   private messageSource = new Subject<ChangeStreamNotification>();
 
   currentMessage$ = this.messageSource.asObservable();
 
-  constructor() { }
+  constructor() {}
 
   changeMessage(message: ChangeStreamNotification) {
     this.messageSource.next(message);
   }
 }
-
-
-
