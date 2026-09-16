@@ -1,24 +1,8 @@
 <div [ngSwitch]="viewOption" class="logbook-container" (resized)="onResized()">
-  <!-- <div #searchBar>
-    <button (click)="toggleSearch()" >
-      Search <mat-icon>search</mat-icon>
-    </button>
-  </div> -->
-  <!-- <div *ngIf='showSearch' class='searchComponent' [@searchExpand]="showSearchExpanded ? 'end' : 'start'">
-    <app-search></app-search>
-  </div>
-  <mat-form-field class="search-form-field">
-    <mat-label>
-      Search <mat-icon>search</mat-icon>
-    </mat-label>
-    <input #searchSnippets matInput type="text" [(ngModel)]="searchString">
-    <button mat-button *ngIf="searchString" matSuffix mat-icon-button aria-label="Clear" (click)="searchString=''">
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-form-field> -->
   <div #snippetContainer class="logbook-content">
     <div *uiScroll="let snippet of logbookScrollService.datasource; let i = index">
       <app-snippet
+        [attr.data-snippet-id]="snippet.id"
         [snippet]="snippet"
         [updatedAt]="snippet.updatedAt"
         [index]="i + 1"
@@ -145,10 +129,6 @@
   >
     <mat-icon>edit</mat-icon>
   </button>
-  <!-- <button #taskButton mat-fab color="accent" aria-label="Edit" class="mat-fab-bottom-right"
-    [@buttonTask]="isOpen ? 'end' : 'start'" (click)="addSnippet($event)" style="z-index: 1000;">
-    <mat-icon>add_task</mat-icon>
-  </button> -->
   <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput />
   <button
     #photoButton
@@ -162,8 +142,5 @@
   >
     <mat-icon>add_a_photo</mat-icon>
   </button>
-  <!-- <button #fileButton mat-fab color="accent" aria-label="File" class="mat-fab-bottom-right"
-    [@buttonFile]="isOpen ? 'end' : 'start'" (click)="addSnippet($event)">
-    <mat-icon>attach_file</mat-icon>
-  </button> -->
 </ng-container>
+

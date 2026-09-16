@@ -43,17 +43,20 @@ import { CKeditorConfig } from '@shared/ckeditor/ckeditor-config';
 import { LogbookScrollService } from '@shared/logbook-scroll.service';
 import { ScrollToElementService } from '@shared/scroll-to-element.service';
 import { LinkType } from 'src/app/core/model/paragraphs';
-import { NgSwitch, NgIf, NgClass, NgStyle } from '@angular/common';
+import { NgSwitch, NgIf, NgClass, NgStyle, AsyncPipe } from '@angular/common';
 import { ResizedDirective } from '../../../core/directives/resized.directive';
 import { UiScrollModule } from 'ngx-ui-scroll';
 import { SnippetComponent as SnippetComponent_1 } from '../../core/snippet/snippet.component';
-import { MatMiniFabButton, MatFabButton } from '@angular/material/button';
+import { MatMiniFabButton, MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { TagEditorComponent as TagEditorComponent_1 } from '../../core/tag-editor/tag-editor.component';
 import { FormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSidenavContainer, MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
+import { DocumentOutlineComponent } from '../../core/document-outline/document-outline.component';
+import { NavigationToggleService } from '../../core/navigation-toggle.service';
 
 @Component({
   selector: 'app-logbook-item',
@@ -222,6 +225,7 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
     public logbookScrollService: LogbookScrollService,
     private scrollToElementService: ScrollToElementService,
     private cdr: ChangeDetectorRef,
+    public navToggle: NavigationToggleService,
   ) {
     console.log('🚨 FRONTEND CODE CHANGED', new Date().toISOString());
 
