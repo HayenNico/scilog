@@ -19,6 +19,7 @@ import { MatIconButton, MatButton, MatMiniFabButton } from '@angular/material/bu
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 import { DashboardItemComponent } from './dashboard-item/dashboard-item.component';
+import { NavigationToggleService } from '../core/navigation-toggle.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -115,6 +116,7 @@ export class DashboardComponent implements OnInit, ComponentCanDeactivate, OnDes
     private router: Router,
     private views: ViewsService,
     private hotkeys: Hotkeys,
+    public navToggle: NavigationToggleService,
   ) {}
 
   ngOnInit(): void {

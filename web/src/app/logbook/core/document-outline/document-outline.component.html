@@ -1,0 +1,21 @@
+<div class="outline-container" *ngIf="headings.length > 0">
+  <div class="outline-content">
+    <div 
+      class="outline-item" 
+      *ngFor="let heading of headings"
+      (click)="scrollToHeading(heading)"
+      [class.active]="heading.id === activeHeadingId"
+      [class.heading-h1]="heading.level === 1"
+      [class.heading-h2]="heading.level === 2"
+      [class.heading-h3]="heading.level === 3"
+      [class.heading-h4]="heading.level === 4"
+      [class.heading-h5]="heading.level === 5"
+      [class.heading-h6]="heading.level === 6"
+      [matTooltip]="heading.title">
+      <span class="outline-text">{{ heading.title }}</span>
+    </div>
+  </div>
+</div>
+<div class="no-headings" *ngIf="headings.length === 0 && !isLoading">
+  No headings found in this logbook.
+</div>
