@@ -52,7 +52,7 @@ import { NavigationToggleService } from './core/navigation-toggle.service';
     NgStyle,
     RouterOutlet,
   ],
-  standalone: true
+  standalone: true,
 })
 export class LogbookComponent implements OnInit, OnDestroy {
   logbookId: string;
@@ -97,11 +97,9 @@ export class LogbookComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.router.events.pipe(
-        filter(event => event instanceof NavigationEnd)
-      ).subscribe(() => {
+      this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
         this.checkActiveTab();
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -177,10 +175,13 @@ export class LogbookComponent implements OnInit, OnDestroy {
   checkActiveTab() {
     const urlTree = this.router.parseUrl(this.router.url);
     const id = urlTree.queryParams['id'];
-    
+
     if (id !== undefined && this.router.url.includes('dashboard-item')) {
       this.isLogbookActive = this.logbookContainer.includes(Number(id));
-    } else if (this.router.url.includes('dashboard') && !this.router.url.includes('dashboard-item')) {
+    } else if (
+      this.router.url.includes('dashboard') &&
+      !this.router.url.includes('dashboard-item')
+    ) {
       this.isLogbookActive = this.logbookContainer.length > 0;
     } else {
       this.isLogbookActive = false;

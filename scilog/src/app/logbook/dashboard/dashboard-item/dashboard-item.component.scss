@@ -26,7 +26,10 @@
   flex: 1 1 auto;
   min-width: 0;
   position: relative; /* Anchor for fixed elements inside logbook */
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .2), 0 2px 8px 0 rgba(0, 0, 0, .14), 0 4px 8px -1px rgba(0, 0, 0, .12);
+  box-shadow:
+    0 1px 4px 0 rgba(0, 0, 0, 0.2),
+    0 2px 8px 0 rgba(0, 0, 0, 0.14),
+    0 4px 8px -1px rgba(0, 0, 0, 0.12);
 }
 
 /* Force Logbook's fixed editor and FABs to be strictly bounded to the Logbook card, preventing them from overlapping Navigation */
@@ -42,7 +45,10 @@
   min-width: 280px;
   height: 100%;
   background-color: var(--main-background);
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .2), 0 2px 8px 0 rgba(0, 0, 0, .14), 0 4px 8px -1px rgba(0, 0, 0, .12);
+  box-shadow:
+    0 1px 4px 0 rgba(0, 0, 0, 0.2),
+    0 2px 8px 0 rgba(0, 0, 0, 0.14),
+    0 4px 8px -1px rgba(0, 0, 0, 0.12);
 }
 
 .outline-header {

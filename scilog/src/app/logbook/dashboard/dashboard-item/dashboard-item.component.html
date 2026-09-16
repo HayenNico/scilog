@@ -60,10 +60,18 @@
     </ng-container>
   </div>
 
-  <div class="scilog-widget-card navigation-widget-card" *ngIf="config?.general.type === 'logbook' && (navToggle.isOpen$ | async)">
+  <div
+    class="scilog-widget-card navigation-widget-card"
+    *ngIf="config?.general.type === 'logbook' && (navToggle.isOpen$ | async)"
+  >
     <div class="outline-header">
       Navigation
-      <button mat-icon-button (click)="navToggle.set(false)" matTooltip="Close Navigation" style="position: absolute; right: 5px; top: 5px; transform: scale(0.8);">
+      <button
+        mat-icon-button
+        (click)="navToggle.set(false)"
+        matTooltip="Close Navigation"
+        style="position: absolute; right: 5px; top: 5px; transform: scale(0.8)"
+      >
         <mat-icon>close</mat-icon>
       </button>
     </div>

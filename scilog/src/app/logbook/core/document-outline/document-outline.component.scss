@@ -21,14 +21,16 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
   color: var(--default-text-color);
   border-left: 3px solid transparent;
-  
+
   &:hover {
     background-color: var(--ck-toolbar-color-background);
   }
-  
+
   &.active {
     background-color: var(--ck-toolbar-color-background);
     color: var(--button-accent);
