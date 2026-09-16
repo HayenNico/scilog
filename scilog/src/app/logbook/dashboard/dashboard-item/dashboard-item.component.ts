@@ -26,6 +26,9 @@ import { ChartComponent } from '../../widgets/chart/chart.component';
 import { TodosComponent } from '../../widgets/todos/todos.component';
 import { SnippetViewerComponent } from '../../widgets/snippet-viewer/snippet-viewer.component';
 import { ScicatViewerComponent } from '../../widgets/scicat-viewer/scicat-viewer.component';
+import { AsyncPipe } from '@angular/common';
+import { DocumentOutlineComponent } from '../../core/document-outline/document-outline.component';
+import { NavigationToggleService } from '../../core/navigation-toggle.service';
 
 @Component({
   selector: 'app-dashboard-item',
@@ -46,6 +49,8 @@ import { ScicatViewerComponent } from '../../widgets/scicat-viewer/scicat-viewer
     SnippetViewerComponent,
     ScicatViewerComponent,
     NgSwitchDefault,
+    AsyncPipe,
+    DocumentOutlineComponent,
   ],
 })
 export class DashboardItemComponent implements OnInit, ComponentCanDeactivate, OnDestroy {
@@ -65,13 +70,25 @@ export class DashboardItemComponent implements OnInit, ComponentCanDeactivate, O
   dashboardView = true;
   viewSubscription: Subscription = null;
 
+  logbookId: string;
+
   constructor(
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private views: ViewsService,
+    public navToggle: NavigationToggleService,
   ) {}
 
   ngOnInit(): void {
+    if (this.route.parent != null) {
+      this.subscriptions.push(
+        this.route.parent.url.subscribe((urlPath) => {
+          if (typeof urlPath[1] != 'undefined') {
+            this.logbookId = urlPath[1].path;
+          }
+        }),
+      );
+    }
     this.subscriptions.push(
       this.route.queryParamMap.subscribe((data) => {
         console.log('query params: ', data);

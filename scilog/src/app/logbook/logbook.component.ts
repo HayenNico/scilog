@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ChangeStreamService } from '@shared/change-stream.service';
 import { ChangeStreamNotification } from '@shared/changestreamnotification.model';
 import { Subscription } from 'rxjs';
@@ -25,6 +25,13 @@ import { NavigationButtonComponent } from './navigation-button/navigation-button
 import { NgStyle } from '@angular/common';
 import { LogbookDataService } from '@shared/remote-data.service';
 
+import { DocumentOutlineComponent } from './core/document-outline/document-outline.component';
+
+import { filter } from 'rxjs/operators';
+import { NavigationEnd } from '@angular/router';
+
+import { NavigationToggleService } from './core/navigation-toggle.service';
+
 @Component({
   selector: 'app-logbook',
   templateUrl: './logbook.component.html',
@@ -45,9 +52,12 @@ import { LogbookDataService } from '@shared/remote-data.service';
     NgStyle,
     RouterOutlet,
   ],
+  standalone: true,
 })
 export class LogbookComponent implements OnInit, OnDestroy {
   logbookId: string;
+  isLogbookActive = false;
+  isNavigationOpen = false;
 
   showLoadingCircle = true;
   array: ChangeStreamNotification[];
@@ -81,9 +91,17 @@ export class LogbookComponent implements OnInit, OnDestroy {
     private views: ViewsService,
     private router: Router,
     private tags: TagService,
+    public navToggle: NavigationToggleService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
+    this.subscriptions.push(
+      this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+        this.checkActiveTab();
+      }),
+    );
+
     this.subscriptions.push(
       this.tasks.currentTasks.subscribe((tasks) => {
         this.numTasks = this.tasks.numTasks;
@@ -121,6 +139,7 @@ export class LogbookComponent implements OnInit, OnDestroy {
                 break;
             }
           });
+          this.checkActiveTab();
         }
       }),
     );
@@ -151,6 +170,23 @@ export class LogbookComponent implements OnInit, OnDestroy {
 
   deactivateLogbook() {
     this.logbookInfo.logbookInfo = null;
+  }
+
+  checkActiveTab() {
+    const urlTree = this.router.parseUrl(this.router.url);
+    const id = urlTree.queryParams['id'];
+
+    if (id !== undefined && this.router.url.includes('dashboard-item')) {
+      this.isLogbookActive = this.logbookContainer.includes(Number(id));
+    } else if (
+      this.router.url.includes('dashboard') &&
+      !this.router.url.includes('dashboard-item')
+    ) {
+      this.isLogbookActive = this.logbookContainer.length > 0;
+    } else {
+      this.isLogbookActive = false;
+      this.navToggle.set(false);
+    }
   }
 
   openDashboardItem(id: number) {}
