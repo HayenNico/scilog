@@ -1,6 +1,11 @@
 <div class="gridster-container" (appResized)="onResized()">
   <div class="dashboard-edit">
-    <button mat-icon-button (click)="navToggle.toggle()" matTooltip="Toggle Document Navigation" style="margin-right: 8px;">
+    <button
+      mat-icon-button
+      (click)="navToggle.toggle()"
+      matTooltip="Toggle Document Navigation"
+      style="margin-right: 8px"
+    >
       <mat-icon>format_list_bulleted</mat-icon>
     </button>
     <button mat-icon-button (click)="addItemToDashboard()" *ngIf="editMode" matTooltip="Add widget">

@@ -24,47 +24,47 @@ export interface HeadingItem {
   styleUrls: ['./document-outline.component.scss'],
   providers: [ChangeStreamService],
   imports: [NgIf, NgFor, NgStyle, MatIconModule, MatTooltipModule, MatButtonModule],
-  standalone: true
+  standalone: true,
 })
 export class DocumentOutlineComponent implements OnInit, OnDestroy {
   @Input() logbookId: string;
-  
+
   headings: HeadingItem[] = [];
   allSnippets: Paragraphs[] = [];
   isLoading = false;
   activeHeadingId: string = null;
-  
+
   private subscriptions: Subscription[] = [];
   private currentConfig: WidgetItemConfig;
   private scrollListener: any;
   private isAutoScrolling = false;
-  
+
   constructor(
     private logbookItemDataService: LogbookItemDataService,
     private changeStreamService: ChangeStreamService,
     private scrollToElementService: ScrollToElementService,
     private viewsService: ViewsService,
     private cdr: ChangeDetectorRef,
-    private zone: NgZone
+    private zone: NgZone,
   ) {}
 
   ngOnInit() {
     this.subscriptions.push(
       this.viewsService.currentWidgetConfigs.subscribe((configs) => {
         if (configs) {
-          const logbookConfig = configs.find(c => c.config.general.type === 'logbook');
+          const logbookConfig = configs.find((c) => c.config.general.type === 'logbook');
           if (logbookConfig) {
             this.currentConfig = logbookConfig.config;
             this.loadHeadings();
             this.setupChangeStream();
           }
         }
-      })
+      }),
     );
 
     this.zone.runOutsideAngular(() => {
       this.scrollListener = () => this.onScroll();
-      
+
       const checkAndAttach = () => {
         const container = document.querySelector('.logbook-content');
         if (container) {
@@ -80,11 +80,13 @@ export class DocumentOutlineComponent implements OnInit, OnDestroy {
   private setupChangeStream() {
     if (this.logbookId && this.currentConfig) {
       this.subscriptions.push(
-        this.changeStreamService.getNotification(this.logbookId, this.currentConfig).subscribe((notification) => {
-          if (notification?.content?.snippetType === 'paragraph') {
-            this.loadHeadings();
-          }
-        })
+        this.changeStreamService
+          .getNotification(this.logbookId, this.currentConfig)
+          .subscribe((notification) => {
+            if (notification?.content?.snippetType === 'paragraph') {
+              this.loadHeadings();
+            }
+          }),
       );
     }
   }
@@ -93,7 +95,11 @@ export class DocumentOutlineComponent implements OnInit, OnDestroy {
     if (!this.currentConfig || !this.logbookId) return;
     this.isLoading = true;
     try {
-      this.allSnippets = await this.logbookItemDataService.getDataBuffer(0, 10000, this.currentConfig);
+      this.allSnippets = await this.logbookItemDataService.getDataBuffer(
+        0,
+        10000,
+        this.currentConfig,
+      );
       this.parseHeadings(this.allSnippets);
     } catch (e) {
       console.error('Error loading headings', e);
@@ -106,7 +112,7 @@ export class DocumentOutlineComponent implements OnInit, OnDestroy {
   private parseHeadings(snippets: Paragraphs[]) {
     this.headings = [];
     const parser = new DOMParser();
-    snippets.forEach(snippet => {
+    snippets.forEach((snippet) => {
       if (!snippet.textcontent) return;
       const doc = parser.parseFromString(snippet.textcontent, 'text/html');
       const headingElements = doc.querySelectorAll('h1, h2, h3, h4, h5, h6');
@@ -116,11 +122,11 @@ export class DocumentOutlineComponent implements OnInit, OnDestroy {
           id: el.id || `heading-${snippet.id}-${index}`,
           snippetId: snippet.id,
           title: el.textContent || 'Untitled',
-          level: level
+          level: level,
         });
       });
     });
-    
+
     // Initial check
     setTimeout(() => this.onScroll(), 100);
   }
@@ -130,10 +136,10 @@ export class DocumentOutlineComponent implements OnInit, OnDestroy {
       this.isAutoScrolling = true;
       this.activeHeadingId = heading.id;
       this.cdr.detectChanges();
-      
+
       this.scrollToElementService.selectedItem = {
         config: this.currentConfig,
-        event: { id: heading.snippetId }
+        event: { id: heading.snippetId },
       };
 
       setTimeout(() => {
@@ -144,25 +150,25 @@ export class DocumentOutlineComponent implements OnInit, OnDestroy {
 
   private onScroll() {
     if (this.isAutoScrolling || this.headings.length === 0) return;
-    
+
     const container = document.querySelector('.logbook-content');
     if (!container) return;
-    
+
     const containerRect = container.getBoundingClientRect();
     const snippets = Array.from(container.querySelectorAll('app-snippet'));
-    
+
     let foundHeadingId = null;
     let closestDistance = -Infinity;
-    
+
     for (const snippet of snippets) {
       const snippetId = snippet.getAttribute('data-snippet-id');
       if (!snippetId) continue;
-      
+
       const headingElements = snippet.querySelectorAll('h1, h2, h3, h4, h5, h6');
       headingElements.forEach((h, index) => {
         const hRect = h.getBoundingClientRect();
         const distance = hRect.top - containerRect.top;
-        
+
         // threshold 120px to consider it "active"
         if (distance <= 120 && distance > closestDistance) {
           closestDistance = distance;
@@ -170,7 +176,7 @@ export class DocumentOutlineComponent implements OnInit, OnDestroy {
         }
       });
     }
-    
+
     // If no heading is found in DOM, fallback to virtual scrolling chronological order
     if (!foundHeadingId && snippets.length > 0) {
       const firstSnippetId = snippets[0].getAttribute('data-snippet-id');
@@ -179,7 +185,7 @@ export class DocumentOutlineComponent implements OnInit, OnDestroy {
         foundHeadingId = precedingHeading.id;
       }
     }
-    
+
     if (foundHeadingId && foundHeadingId !== this.activeHeadingId) {
       this.zone.run(() => {
         this.activeHeadingId = foundHeadingId;
@@ -189,12 +195,12 @@ export class DocumentOutlineComponent implements OnInit, OnDestroy {
   }
 
   private findPrecedingHeading(snippetId: string): HeadingItem {
-    const snippetIndex = this.allSnippets.findIndex(s => s.id === snippetId);
+    const snippetIndex = this.allSnippets.findIndex((s) => s.id === snippetId);
     if (snippetIndex === -1) return null;
-    
+
     for (let i = snippetIndex; i >= 0; i--) {
       const sId = this.allSnippets[i].id;
-      const headingsInSnippet = this.headings.filter(h => h.snippetId === sId);
+      const headingsInSnippet = this.headings.filter((h) => h.snippetId === sId);
       if (headingsInSnippet.length > 0) {
         return headingsInSnippet[headingsInSnippet.length - 1];
       }
@@ -203,7 +209,7 @@ export class DocumentOutlineComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach((s) => s.unsubscribe());
     const container = document.querySelector('.logbook-content');
     if (container && this.scrollListener) {
       container.removeEventListener('scroll', this.scrollListener);
