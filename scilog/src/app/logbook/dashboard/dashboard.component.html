@@ -1,5 +1,13 @@
 <div class="gridster-container" (appResized)="onResized()">
   <div class="dashboard-edit">
+    <button
+      mat-icon-button
+      (click)="navToggle.toggle()"
+      matTooltip="Toggle Document Navigation"
+      style="margin-right: 8px"
+    >
+      <mat-icon>format_list_bulleted</mat-icon>
+    </button>
     <button mat-icon-button (click)="addItemToDashboard()" *ngIf="editMode" matTooltip="Add widget">
       <mat-icon>add</mat-icon>
     </button>
@@ -19,8 +27,9 @@
       [item]="item"
       *ngFor="let item of dashboard; let i = index"
       class="gridster-item"
+      [class.transparent-widget]="item.config?.general?.type === 'logbook'"
     >
-      <div class="dashboard-item" *ngIf="!editMode">
+      <div class="dashboard-item" *ngIf="!editMode" style="height: 100%">
         <app-dashboard-item
           [configIndex]="i"
           (openFullscreen)="openFullscreen($event)"
