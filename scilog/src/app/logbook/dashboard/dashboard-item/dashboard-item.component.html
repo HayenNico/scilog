@@ -61,8 +61,23 @@
   </div>
 
   <div
+    class="nav-resizer"
+    *ngIf="config?.general.type === 'logbook' && (navToggle.isOpen$ | async)"
+    (mousedown)="startNavResize($event)"
+    (touchstart)="startNavResize($event)"
+    [class.active]="isResizingNav"
+    role="separator"
+    aria-orientation="vertical"
+    matTooltip="Drag to resize navigation pane"
+  >
+    <div class="resizer-handle"></div>
+  </div>
+
+  <div
     class="scilog-widget-card navigation-widget-card"
     *ngIf="config?.general.type === 'logbook' && (navToggle.isOpen$ | async)"
+    [style.width.px]="navWidth"
+    [style.flexBasis.px]="navWidth"
   >
     <div class="outline-header">
       Navigation
