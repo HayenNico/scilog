@@ -32,4 +32,6 @@ export interface Basesnippets {
   versionable?: boolean;
   deleted?: boolean;
   importance?: number;
+  textcontent?: string;
+  isPinned?: boolean;
 }

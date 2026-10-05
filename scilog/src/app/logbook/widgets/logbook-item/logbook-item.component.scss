@@ -10,6 +10,112 @@
   right: 20px;
 }
 
+.pinned-section {
+  margin: -25px 15px 4px 15px;
+  background-color: var(--ck-toolbar-color-background, rgba(0, 172, 193, 0.08));
+  border: 1px solid var(--ck-toolbar-border-color, rgba(0, 0, 0, 0.12));
+  border-radius: 8px;
+  padding: 4px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1000;
+}
+
+.pinned-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--default-text-color);
+  opacity: 0.9;
+}
+
+.pinned-header-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: var(--button-accent, #00acc1);
+}
+
+.pinned-count-badge {
+  background-color: var(--button-accent, #00acc1);
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.pinned-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pinned-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--dashboard-item, #ffffff);
+  border: 1px solid var(--ck-toolbar-border-color, rgba(0, 0, 0, 0.15));
+  border-radius: 16px;
+  padding: 4px 8px 4px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+  max-width: 280px;
+
+  &:hover {
+    background-color: var(--ck-toolbar-color-background, #f0f0f0);
+    border-color: var(--button-accent, #00acc1);
+  }
+}
+
+.pinned-toggle-item {
+  color: var(--button-accent, #00acc1);
+  font-weight: bold;
+  padding: 4px 10px;
+  justify-content: center;
+}
+
+.pinned-item-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  color: var(--button-accent, #00acc1);
+  flex: 0 0 14px;
+}
+
+.pinned-item-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--default-text-color);
+  font-weight: 500;
+}
+
+.unpin-btn {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0;
+  flex: 0 0 20px;
+  opacity: 0.6;
+  &:hover {
+    opacity: 1;
+  }
+  .unpin-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+  }
+}
+
 .searchComponent {
   z-index: 1000;
   position: absolute;
