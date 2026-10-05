@@ -95,11 +95,17 @@ export class SnippetComponent implements OnInit, AfterContentInit, AfterViewChec
   @Input()
   linkType: LinkType = LinkType.PARAGRAPH;
 
+  @Input()
+  isPinned: boolean = false;
+
   @Output()
   selected = new EventEmitter<ChangeStreamNotification>();
 
   @Output()
   isLoading = new EventEmitter<boolean>();
+
+  @Output()
+  pinnedStateChange = new EventEmitter<{ snippet: ChangeStreamNotification; isPinned: boolean }>();
 
   isSelected = false;
   highlightState = 'default';
@@ -257,6 +263,12 @@ export class SnippetComponent implements OnInit, AfterContentInit, AfterViewChec
     // console.log($event);
     this.selected.emit(this.snippet);
     // this.isSelected = !this.isSelected;
+  }
+
+  togglePinSnippet() {
+    this.isPinned = !this.isPinned;
+    this.snippet.isPinned = this.isPinned;
+    this.pinnedStateChange.emit({ snippet: this.snippet, isPinned: this.isPinned });
   }
 
   deleteSnippet() {
