@@ -899,8 +899,12 @@ describe('LogbookItemComponent', () => {
   });
 
   it('should generate human-readable titles for pinned snippet preview chips', () => {
-    expect(component.getSnippetTitle({ dashboardName: 'Custom Dashboard' } as any)).toBe('Custom Dashboard');
-    expect(component.getSnippetTitle({ textcontent: '<h1>Title Header</h1><p>Body text</p>' } as any)).toBe('Title HeaderBody text');
+    expect(component.getSnippetTitle({ dashboardName: 'Custom Dashboard' } as any)).toBe(
+      'Custom Dashboard',
+    );
+    expect(
+      component.getSnippetTitle({ textcontent: '<h1>Title Header</h1><p>Body text</p>' } as any),
+    ).toBe('Title HeaderBody text');
     expect(component.getSnippetTitle({ id: 'abcdef123456' } as any)).toBe('Entry abcdef');
   });
 
