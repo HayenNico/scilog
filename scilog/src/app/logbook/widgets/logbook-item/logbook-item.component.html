@@ -1,4 +1,41 @@
 <div [ngSwitch]="viewOption" class="logbook-container" (resized)="onResized()">
+  <!-- Pinned Snippets Section -->
+  <div class="pinned-section" *ngIf="pinnedSnippets && pinnedSnippets.length > 0">
+    <div class="pinned-header">
+      <mat-icon class="pinned-header-icon">push_pin</mat-icon>
+      <span class="pinned-header-title">Pinned</span>
+      <span class="pinned-count-badge">{{ pinnedSnippets.length }}</span>
+    </div>
+    <div class="pinned-list">
+      <div
+        class="pinned-item"
+        *ngFor="let pSnippet of displayedPinnedSnippets"
+        (click)="scrollToSnippet(pSnippet)"
+        matTooltip="Click to jump to entry"
+      >
+        <mat-icon class="pinned-item-icon">push_pin</mat-icon>
+        <span class="pinned-item-title">{{ getSnippetTitle(pSnippet) }}</span>
+        <button
+          mat-icon-button
+          type="button"
+          class="unpin-btn"
+          (click)="unpinSnippet(pSnippet, $event)"
+          matTooltip="Unpin entry"
+        >
+          <mat-icon class="unpin-icon">close</mat-icon>
+        </button>
+      </div>
+      <div
+        class="pinned-item pinned-toggle-item"
+        *ngIf="pinnedSnippets.length > 3"
+        (click)="togglePinnedExpanded()"
+      >
+        <span *ngIf="!isPinnedExpanded"> +{{ hiddenPinnedCount }}</span>
+        <span *ngIf="isPinnedExpanded">Show less</span>
+      </div>
+    </div>
+  </div>
+
   <div #snippetContainer class="logbook-content">
     <div *uiScroll="let snippet of logbookScrollService.datasource; let i = index">
       <app-snippet
@@ -8,6 +45,8 @@
         [index]="i + 1"
         [config]="config"
         [indexOrdered]="_indexOrder(i)"
+        [isPinned]="isSnippetPinned(snippet)"
+        (pinnedStateChange)="onSnippetPinnedStateChange($event)"
         (isLoading)="logbookScrollService.setItemStatus(snippet.id, $event)"
       >
       </app-snippet>

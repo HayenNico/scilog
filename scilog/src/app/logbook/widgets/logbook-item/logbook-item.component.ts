@@ -209,6 +209,25 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
   public editorConfig = CKeditorConfig;
   dataEditor: any;
 
+  pinnedSnippets: Basesnippets[] = [];
+  private pinnedSnippetIds = new Set<string>();
+  isPinnedExpanded = false;
+
+  get displayedPinnedSnippets() {
+    if (this.isPinnedExpanded || this.pinnedSnippets.length <= 3) {
+      return this.pinnedSnippets;
+    }
+    return this.pinnedSnippets.slice(0, 3);
+  }
+
+  get hiddenPinnedCount() {
+    return this.pinnedSnippets.length - 3;
+  }
+
+  togglePinnedExpanded() {
+    this.isPinnedExpanded = !this.isPinnedExpanded;
+  }
+
   constructor(
     private data: AddContentService,
     private notificationService: ChangeStreamService,
@@ -274,6 +293,7 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLightMode = localStorage.getItem('light-mode') == 'true';
+    this.loadPinnedSnippets();
     console.log(this.isLightMode);
     if (this.route.snapshot.queryParams.id) {
       this.dashboardView = false;
@@ -345,6 +365,8 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isReadOnly = this.config.general.readonly;
 
         await this.logbookScrollService.initialize(this.config);
+        this.loadPinnedSnippets();
+        this.fetchPinnedSnippetsFromDataBuffer();
         this.logbookCount = (await this.logbookItemDataService.getCount(this.config)).count;
         this.logbookScrollService.containerRef = this.snippetContainerRef;
         this.startNotificationManager(); // Only runs on real config change
@@ -745,7 +767,7 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
       payload.ownerGroup = this.userPreferences.userInfo.username;
     }
     console.log('posting data');
-    console.log('test console');
+    console.log('test console24563');
     console.log('FINAL IMPORTANCE SENT:', msg.importance);
 
     console.log(payload);
@@ -1150,6 +1172,108 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
       return this.logbookCount - i;
     }
     return i + 1;
+  }
+
+  private getLogbookId(): string {
+    return this.logbookId || this.config?.filter?.targetId || 'default';
+  }
+
+  private getStorageKey(): string {
+    return 'scilog_pinned_snippets_' + this.getLogbookId();
+  }
+
+  loadPinnedSnippets() {
+    try {
+      const raw = localStorage.getItem(this.getStorageKey());
+      if (raw) {
+        const ids: string[] = JSON.parse(raw);
+        this.pinnedSnippetIds = new Set(ids);
+      }
+    } catch (e) {}
+  }
+
+  private savePinnedSnippetIds() {
+    try {
+      const ids = Array.from(this.pinnedSnippetIds);
+      localStorage.setItem(this.getStorageKey(), JSON.stringify(ids));
+    } catch (e) {}
+  }
+
+  async fetchPinnedSnippetsFromDataBuffer() {
+    if (!this.config) return;
+    try {
+      const snippets = await this.logbookItemDataService.getDataBuffer(0, 1000, this.config);
+      if (snippets && snippets.length > 0) {
+        for (const snippet of snippets) {
+          if (snippet.isPinned || (snippet.id && this.pinnedSnippetIds.has(snippet.id))) {
+            snippet.isPinned = true;
+            if (snippet.id) this.pinnedSnippetIds.add(snippet.id);
+            if (!this.pinnedSnippets.some((s) => s.id === snippet.id)) {
+              this.pinnedSnippets.push(snippet);
+            }
+          }
+        }
+        this.savePinnedSnippetIds();
+        this.cdr.detectChanges();
+      }
+    } catch (e) {}
+  }
+
+  isSnippetPinned(snippet: Basesnippets): boolean {
+    if (!snippet || !snippet.id) return false;
+    return snippet.isPinned || this.pinnedSnippetIds.has(snippet.id);
+  }
+
+  onSnippetPinnedStateChange(event: { snippet: Basesnippets; isPinned: boolean }) {
+    if (!event.snippet || !event.snippet.id) return;
+    const id = event.snippet.id;
+    if (event.isPinned) {
+      this.pinnedSnippetIds.add(id);
+      event.snippet.isPinned = true;
+      if (!this.pinnedSnippets.some((s) => s.id === id)) {
+        this.pinnedSnippets.push(event.snippet);
+      }
+    } else {
+      this.pinnedSnippetIds.delete(id);
+      event.snippet.isPinned = false;
+      this.pinnedSnippets = this.pinnedSnippets.filter((s) => s.id !== id);
+    }
+    this.savePinnedSnippetIds();
+    try {
+      this.logbookItemDataService.uploadParagraph({ id: id, isPinned: event.isPinned } as any);
+    } catch (e) {}
+    this.cdr.detectChanges();
+  }
+
+  unpinSnippet(snippet: Basesnippets, event?: MouseEvent) {
+    if (event) event.stopPropagation();
+    this.onSnippetPinnedStateChange({ snippet: snippet, isPinned: false });
+  }
+
+  scrollToSnippet(snippet: Basesnippets) {
+    if (!snippet || !snippet.id) return;
+    this.scrollToElementService.selectedItem = {
+      config: this.config,
+      event: { id: snippet.id },
+    };
+  }
+
+  getSnippetTitle(snippet: Basesnippets): string {
+    if (snippet.dashboardName) {
+      return snippet.dashboardName;
+    }
+    if (snippet.textcontent) {
+      const tmp = document.createElement('DIV');
+      tmp.innerHTML = snippet.textcontent;
+      const text = (tmp.textContent || tmp.innerText || '').trim();
+      if (text.length > 0) {
+        return text.length > 35 ? text.substring(0, 35) + '...' : text;
+      }
+    }
+    if (snippet.files && snippet.files.length > 0) {
+      return snippet.files[0].file?.name || 'File Attachment';
+    }
+    return 'Entry ' + (snippet.id ? snippet.id.substring(0, 6) : '');
   }
 
   ngOnDestroy() {

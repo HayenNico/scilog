@@ -108,6 +108,17 @@
   align-items: center;
   /* opacity: 0.1; */
 }
+
+.mat-fab-top-right-pinned {
+  position: absolute;
+  top: 5px;
+  right: 40px;
+  z-index: 10;
+  color: var(--button-accent, #00acc1);
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
 .mat-fab-top-right-user {
   position: absolute;
   top: 4px;
