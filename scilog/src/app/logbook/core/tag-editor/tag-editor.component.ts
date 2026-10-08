@@ -70,7 +70,7 @@ export class TagEditorComponent implements OnInit, OnChanges {
   config: WidgetItemConfig;
 
   @Input()
-  syncAtStart = true;
+  syncAtStart = false;
 
   tag: Tags[] = [];
   lastTags: Tags[] = [];
