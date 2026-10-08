@@ -881,4 +881,35 @@ describe('LogbookItemComponent', () => {
     fixture.detectChanges();
     expect(getIndexSpy).toHaveBeenCalledWith(_id, componentConfig);
   });
+
+  it('should clear editor tag state after addContent submission', () => {
+    const submitSpy = spyOn(component, 'submitContent');
+    component.editorContentRef = {
+      editorInstance: {
+        getData: () => '<p>New message content</p>',
+        prel_filestorage: [],
+        setData: jasmine.createSpy('setData'),
+      },
+    } as any;
+    component.tagEditorRef = {
+      tag: [{ name: 'fhgghf' }],
+      tagInput: { nativeElement: { value: 'fhgghf' } },
+      tagsCtrl: { setValue: jasmine.createSpy('setValue') },
+    } as any;
+    component.tag = ['fhgghf'];
+
+    component.addContent(true);
+
+    expect(submitSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        tags: ['fhgghf'],
+        isMessage: true,
+      }),
+    );
+    expect(component.editorContentRef.editorInstance.setData).toHaveBeenCalledWith('');
+    expect(component.tag).toEqual([]);
+    expect(component.tagEditorRef.tag).toEqual([]);
+    expect(component.tagEditorRef.tagInput.nativeElement.value).toBe('');
+    expect(component.tagEditorRef.tagsCtrl.setValue).toHaveBeenCalledWith(null);
+  });
 });
