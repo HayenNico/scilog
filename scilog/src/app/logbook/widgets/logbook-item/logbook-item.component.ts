@@ -1097,13 +1097,6 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
       notification.parentId = this.targetId;
       notification.isMessage = isMessage;
       // notification.files = this.editorContentRef.editorInstance.prel_filestorage;
-      if (
-        !this.modifiedMetadata &&
-        this.childSnippets.last &&
-        this.childSnippets.last.snippet.tags
-      ) {
-        this.tag = this.childSnippets.last.snippet.tags;
-      }
       notification.tags = this.tagEditorRef?.tag?.map((tag) => tag.name) || [];
 
       notification.importance = Number(this.importance ?? 3);
@@ -1111,6 +1104,14 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
       this.submitContent(notification);
       console.log(notification);
       this.editorContentRef.editorInstance.setData('');
+      this.tag = [];
+      if (this.tagEditorRef) {
+        this.tagEditorRef.tag = [];
+        if (this.tagEditorRef.tagInput?.nativeElement) {
+          this.tagEditorRef.tagInput.nativeElement.value = '';
+        }
+        this.tagEditorRef.tagsCtrl?.setValue(null);
+      }
     }
   }
 

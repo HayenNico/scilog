@@ -58,4 +58,9 @@ describe('TagEditorComponent', () => {
     fixture.detectChanges();
     expect(stringsToTagsSpy).toHaveBeenCalledOnceWith(['someNew']);
   });
+
+  it('should default syncAtStart to false and keep tags empty on initialization', () => {
+    expect(component.syncAtStart).toBeFalse();
+    expect(component.tag).toEqual([]);
+  });
 });
