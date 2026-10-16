@@ -126,7 +126,10 @@
         {{ tag }}
       </span>
     </div>
-    <div class="snippet-importance" *ngIf="snippet?.importance !== null && config?.view?.showImportance !== false">
+    <div
+      class="snippet-importance"
+      *ngIf="snippet?.importance !== null && config?.view?.showImportance !== false"
+    >
       <span class="importance-badge"> Importance: {{ snippet.importance }} </span>
     </div>
   </mat-card-content>

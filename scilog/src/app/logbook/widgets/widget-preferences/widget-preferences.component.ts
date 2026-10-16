@@ -117,7 +117,6 @@ export class WidgetPreferencesComponent implements OnInit, AfterViewInit, OnDest
   additionalLogbooksCtrl = new UntypedFormControl();
   importanceLevels = [1, 2, 3, 4, 5];
   importance = new UntypedFormControl([]);
-  
 
   visible = true;
   removable = true;
