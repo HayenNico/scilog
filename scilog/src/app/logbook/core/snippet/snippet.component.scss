@@ -158,6 +158,16 @@
   float: right;
   margin: 1px;
 }
+.importance-badge {
+  background-color: #e0e0e0;
+  color: rgba(0, 0, 0, 0.87);
+  width: max-content;
+  border-radius: 5px;
+  padding: 2px;
+  float: left;
+  margin: 1px;
+  font-size: 12px;
+}
 
 .card-header {
   position: absolute;
