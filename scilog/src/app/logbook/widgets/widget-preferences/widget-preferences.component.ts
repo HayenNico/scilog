@@ -102,6 +102,7 @@ export class WidgetPreferencesComponent implements OnInit, AfterViewInit, OnDest
   filterBasics: UntypedFormGroup;
   hideMetadata = new UntypedFormControl(false);
   showSnippetHeader = new UntypedFormControl(false);
+  showImportance = new UntypedFormControl(true);
   readOnlyLogbook = new UntypedFormControl(false);
   hideRequiredControl = new UntypedFormControl(false);
   descendingOrder = new UntypedFormControl(false);
@@ -192,6 +193,9 @@ export class WidgetPreferencesComponent implements OnInit, AfterViewInit, OnDest
     }
     if (typeof this.data.view.showSnippetHeader != 'undefined') {
       this.showSnippetHeader.setValue(this.data.view.showSnippetHeader);
+    }
+    if (typeof this.data.view.showImportance != 'undefined') {
+      this.showImportance.setValue(this.data.view.showImportance);
     }
     if (typeof this.data.general.readonly != 'undefined') {
       this.readOnlyLogbook.setValue(this.data.general.readonly);
@@ -511,6 +515,7 @@ export class WidgetPreferencesComponent implements OnInit, AfterViewInit, OnDest
     this.data.filter.excludeTags = this.excludeTag.map((tag) => tag.name);
     this.data.view.hideMetadata = this.hideMetadata.value;
     this.data.view.showSnippetHeader = this.showSnippetHeader.value;
+    this.data.view.showImportance = this.showImportance.value;
     this.data.general.readonly = this.readOnlyLogbook.value;
     this.data.view.order = ['defaultOrder ' + this.booleanToOrderTag(this.descendingOrder.value)];
     console.log(this.data);
