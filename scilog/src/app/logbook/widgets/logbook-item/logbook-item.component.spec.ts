@@ -28,6 +28,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 class ChangeStreamServiceMock {}
 
 class AddContentServiceMock {
+  currentMessage$ = of({});
   currentMessage = of({});
 }
 
