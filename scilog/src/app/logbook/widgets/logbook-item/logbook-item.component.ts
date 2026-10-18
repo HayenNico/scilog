@@ -367,7 +367,7 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
       if (this.dataService == null) {
-        this.dataService = this.data.currentMessage.subscribe((message) => {
+        this.dataService = this.data.currentMessage$.subscribe((message) => {
           // console.log(message);
           this.message = message;
           if (message != null && Object.keys(this.message).length != 0) {
