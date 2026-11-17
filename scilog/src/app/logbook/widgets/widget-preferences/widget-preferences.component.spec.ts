@@ -51,7 +51,7 @@ describe('WidgetPreferencesComponent', () => {
       ],
       providers: [
         UntypedFormBuilder,
-        { provide: MatDialogRef, useValue: MatDialogRef },
+        { provide: MatDialogRef, useValue: { close: jasmine.createSpy('close') } },
         {
           provide: MAT_DIALOG_DATA,
           useValue: {
@@ -96,5 +96,40 @@ describe('WidgetPreferencesComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should default showImportance to true when not provided in config', () => {
+    expect(component.showImportance.value).toBeTrue();
+  });
+
+  it('should initialize showImportance from config when provided', () => {
+    component.data.view.showImportance = false;
+    component.ngOnInit();
+    expect(component.showImportance.value).toBeFalse();
+
+    component.data.view.showImportance = true;
+    component.ngOnInit();
+    expect(component.showImportance.value).toBeTrue();
+  });
+
+  it('should save showImportance to data.view on submit', () => {
+    const dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
+    component['dialogRef'] = dialogRefSpy;
+    component.showImportance.setValue(false);
+
+    component.applyChanges(null);
+
+    expect(component.data.view.showImportance).toBeFalse();
+    expect(dialogRefSpy.close).toHaveBeenCalledWith(component.data);
+  });
+
+  it('should preserve importance filter independently of showImportance', () => {
+    component.importance.setValue([1, 3, 5]);
+    component.showImportance.setValue(false);
+
+    component.applyChanges(null);
+
+    expect(component.data.filter.importance).toEqual([1, 3, 5]);
+    expect(component.data.view.showImportance).toBeFalse();
   });
 });

@@ -26,6 +26,7 @@ export interface WidgetItemConfig {
     order?: string[];
     hideMetadata?: boolean;
     showSnippetHeader?: boolean;
+    showImportance?: boolean;
   };
 }
 

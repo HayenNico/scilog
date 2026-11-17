@@ -296,4 +296,56 @@ describe('SnippetComponent', () => {
       expect(component._enableEdit.update).toEqual(t.output);
     });
   });
+
+  describe('importance badge display', () => {
+    it('should display importance badge by default when snippet has importance', () => {
+      component.snippet = { ...snippetMock, importance: 3 } as any;
+      component.config = {
+        general: {},
+        filter: {},
+        view: {},
+      };
+      fixture.detectChanges();
+      const badge = fixture.nativeElement.querySelector('.importance-badge');
+      expect(badge).toBeTruthy();
+      expect(badge.textContent).toContain('Importance: 3');
+    });
+
+    it('should display importance badge when showImportance is true', () => {
+      component.snippet = { ...snippetMock, importance: 4 } as any;
+      component.config = {
+        general: {},
+        filter: {},
+        view: { showImportance: true },
+      };
+      fixture.detectChanges();
+      const badge = fixture.nativeElement.querySelector('.importance-badge');
+      expect(badge).toBeTruthy();
+      expect(badge.textContent).toContain('Importance: 4');
+    });
+
+    it('should hide importance badge completely when showImportance is false', () => {
+      component.snippet = { ...snippetMock, importance: 4 } as any;
+      component.config = {
+        general: {},
+        filter: {},
+        view: { showImportance: false },
+      };
+      fixture.detectChanges();
+      const badge = fixture.nativeElement.querySelector('.importance-badge');
+      expect(badge).toBeNull();
+    });
+
+    it('should not display importance badge when snippet importance is null', () => {
+      component.snippet = { ...snippetMock, importance: null } as any;
+      component.config = {
+        general: {},
+        filter: {},
+        view: { showImportance: true },
+      };
+      fixture.detectChanges();
+      const badge = fixture.nativeElement.querySelector('.importance-badge');
+      expect(badge).toBeNull();
+    });
+  });
 });

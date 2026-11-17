@@ -140,6 +140,14 @@
             </mat-checkbox>
           </div>
 
+          <header class="subSubHeader">Show importance</header>
+          <div class="show-importance-radios">
+            <mat-radio-group [formControl]="showImportance">
+              <mat-radio-button [value]="true">Yes</mat-radio-button>
+              <mat-radio-button [value]="false">No</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
           <header class="subSubHeader">Data must include the following tags</header>
 
           <div class="chips">
