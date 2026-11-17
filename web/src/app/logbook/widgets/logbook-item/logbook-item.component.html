@@ -19,6 +19,7 @@
   <div #snippetContainer class="logbook-content">
     <div *uiScroll="let snippet of logbookScrollService.datasource; let i = index">
       <app-snippet
+        [attr.data-snippet-id]="snippet.id"
         [snippet]="snippet"
         [updatedAt]="snippet.updatedAt"
         [index]="i + 1"

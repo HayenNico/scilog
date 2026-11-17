@@ -18,6 +18,12 @@
   @include default-shadow;
 }
 
+.gridster-item.transparent-widget {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
 .gridster-container {
   /* top: 50px; */
   padding-bottom: 100px;
