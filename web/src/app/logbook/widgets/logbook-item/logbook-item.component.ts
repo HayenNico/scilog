@@ -312,6 +312,8 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
         this.logbookScrollService.containerRef = this.snippetContainerRef;
         // console.log(res)
         this.startNotificationManager();
+        await this.logbookScrollService.relax();
+        this.scrollOnClickTo(this.isDescending ? 'start' : 'end');
       }
     });
   }
