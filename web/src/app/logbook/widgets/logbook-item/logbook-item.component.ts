@@ -923,17 +923,17 @@ export class LogbookItemComponent implements OnInit, AfterViewInit, OnDestroy {
       const notification: ChangeStreamNotification = { ...content, linkType: LinkType.PARAGRAPH };
       notification.parentId = this.targetId;
       notification.isMessage = isMessage;
-      if (
-        !this.modifiedMetadata &&
-        this.childSnippets.last &&
-        this.childSnippets.last.snippet.tags
-      ) {
-        this.tag = this.childSnippets.last.snippet.tags;
-      }
-      notification.tags = this.tagEditorRef.tag.map((tag) => tag.name);
-
+      notification.tags = this.tagEditorRef?.tag?.map((tag) => tag.name) || [];
       this.submitContent(notification);
       this.editorContentRef.editorInstance.setData('');
+      this.tag = [];
+      if (this.tagEditorRef) {
+        this.tagEditorRef.tag = [];
+        if (this.tagEditorRef.tagInput?.nativeElement) {
+          this.tagEditorRef.tagInput.nativeElement.value = '';
+        }
+        this.tagEditorRef.tagsCtrl?.setValue(null);
+      }
     }
   }
 
