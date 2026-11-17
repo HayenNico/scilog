@@ -5,7 +5,7 @@ import { ChangeStreamService } from '@shared/change-stream.service';
 import { ScrollToElementService } from '../scroll-to-element.service';
 import { ViewsService } from '@shared/views.service';
 import { WidgetItemConfig } from '@model/config';
-import { NgIf, NgFor, NgStyle } from '@angular/common';
+import { NgIf, NgFor } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,7 +23,7 @@ export interface HeadingItem {
   templateUrl: './document-outline.component.html',
   styleUrls: ['./document-outline.component.scss'],
   providers: [ChangeStreamService],
-  imports: [NgIf, NgFor, NgStyle, MatIconModule, MatTooltipModule, MatButtonModule],
+  imports: [NgIf, NgFor, MatIconModule, MatTooltipModule, MatButtonModule],
   standalone: true,
 })
 export class DocumentOutlineComponent implements OnInit, OnDestroy {

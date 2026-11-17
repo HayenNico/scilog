@@ -107,7 +107,7 @@ export class DashboardItemComponent implements OnInit, ComponentCanDeactivate, O
     } catch (e) {
       // Ignore if localStorage is restricted
     }
-    if (this.route.parent != null) {
+    if (this.route.parent) {
       this.subscriptions.push(
         this.route.parent.url.subscribe((urlPath) => {
           if (typeof urlPath[1] != 'undefined') {
