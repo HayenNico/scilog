@@ -382,16 +382,20 @@ describe('AddContentComponent', () => {
     expect(localStorageSpy).toHaveBeenCalledOnceWith('123_message', 'edit');
   });
 
-  it('should test sendEditMessage', () => {
+  it('should include selected tags when sending an edited entry', () => {
     component.notification = notificationMock;
     component.data = 'abc';
+    component.tag = ['original-tag', 'added-tag'];
+
     const sendMessageSpy = spyOn(component, 'sendMessage');
     component['sendEditMessage']();
+
     expect(sendMessageSpy).toHaveBeenCalledOnceWith({
       textcontent: 'abc',
       id: '6061d9a13587f37b851694d5',
       linkType: 'paragraph',
       files: [],
+      tags: ['original-tag', 'added-tag'],
     });
   });
 });
