@@ -31,4 +31,6 @@ export interface Basesnippets {
   linkType?: string;
   versionable?: boolean;
   deleted?: boolean;
+  textcontent?: string;
+  isPinned?: boolean;
 }

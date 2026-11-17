@@ -881,4 +881,39 @@ describe('LogbookItemComponent', () => {
     fixture.detectChanges();
     expect(getIndexSpy).toHaveBeenCalledWith(_id, componentConfig);
   });
+
+  it('should handle snippet pinned state changes and unpinning', () => {
+    const mockSnippet = { id: 'snip-100', textcontent: '<p>Pinned content</p>', isPinned: false };
+    expect(component.isSnippetPinned(mockSnippet as any)).toBeFalse();
+
+    // Pin snippet
+    component.onSnippetPinnedStateChange({ snippet: mockSnippet as any, isPinned: true });
+    expect(component.isSnippetPinned(mockSnippet as any)).toBeTrue();
+    expect(component.pinnedSnippets.length).toBe(1);
+    expect(component.pinnedSnippets[0].id).toBe('snip-100');
+
+    // Unpin snippet
+    component.unpinSnippet(mockSnippet as any);
+    expect(component.isSnippetPinned(mockSnippet as any)).toBeFalse();
+    expect(component.pinnedSnippets.length).toBe(0);
+  });
+
+  it('should generate human-readable titles for pinned snippet preview chips', () => {
+    expect(component.getSnippetTitle({ dashboardName: 'Custom Dashboard' } as any)).toBe(
+      'Custom Dashboard',
+    );
+    expect(
+      component.getSnippetTitle({ textcontent: '<h1>Title Header</h1><p>Body text</p>' } as any),
+    ).toBe('Title HeaderBody text');
+    expect(component.getSnippetTitle({ id: 'abcdef123456' } as any)).toBe('Entry abcdef');
+  });
+
+  it('should trigger scroll to snippet when pinned item is selected', () => {
+    const mockSnippet = { id: 'snip-200' };
+    component.scrollToSnippet(mockSnippet as any);
+    expect(component['scrollToElementService'].selectedItem).toEqual({
+      config: component.config,
+      event: { id: 'snip-200' },
+    });
+  });
 });

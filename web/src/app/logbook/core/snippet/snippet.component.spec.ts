@@ -296,4 +296,25 @@ describe('SnippetComponent', () => {
       expect(component._enableEdit.update).toEqual(t.output);
     });
   });
+
+  it('should toggle pin state and emit pinnedStateChange', () => {
+    spyOn(component.pinnedStateChange, 'emit');
+    expect(component.isPinned).toBeFalse();
+
+    component.togglePinSnippet();
+    expect(component.isPinned).toBeTrue();
+    expect(component.snippet.isPinned).toBeTrue();
+    expect(component.pinnedStateChange.emit).toHaveBeenCalledWith({
+      snippet: component.snippet,
+      isPinned: true,
+    });
+
+    component.togglePinSnippet();
+    expect(component.isPinned).toBeFalse();
+    expect(component.snippet.isPinned).toBeFalse();
+    expect(component.pinnedStateChange.emit).toHaveBeenCalledWith({
+      snippet: component.snippet,
+      isPinned: false,
+    });
+  });
 });
